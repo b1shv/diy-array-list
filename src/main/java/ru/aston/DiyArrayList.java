@@ -1,5 +1,9 @@
 package ru.aston;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+
 public class DiyArrayList<T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final int MIN_CAPACITY = 1;
@@ -9,16 +13,20 @@ public class DiyArrayList<T> {
     private int size;
     private int targetCapacity;
 
+    private Sorter sorter;
+
     public DiyArrayList() {
         targetCapacity = DEFAULT_CAPACITY;
         data = new Object[0];
         size = 0;
+        sorter = new SorterImpl();
     }
 
     public DiyArrayList(int capacity) {
         targetCapacity = capacity > 0 ? capacity : MIN_CAPACITY;
         data = new Object[0];
         size = 0;
+        sorter = new SorterImpl();
     }
 
     public int size() {
@@ -66,8 +74,8 @@ public class DiyArrayList<T> {
         }
     }
 
-    public void sort() {
-
+    public void sort(Comparator<T> comparator) {
+        sorter.sort((T[]) data, size, comparator);
     }
 
     private void extend() {
@@ -88,5 +96,22 @@ public class DiyArrayList<T> {
         if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException(String.format("Index %s is out of bounds for length %s", index, size));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DiyArrayList<?> that = (DiyArrayList<?>) o;
+        return size == that.size && Objects.deepEquals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(data), size);
     }
 }
