@@ -1,8 +1,6 @@
 package ru.aston;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class DiyArrayList<T> {
     private static final int DEFAULT_CAPACITY = 10;
@@ -13,7 +11,7 @@ public class DiyArrayList<T> {
     private int size;
     private int targetCapacity;
 
-    private Sorter sorter;
+    private final Sorter sorter;
 
     public DiyArrayList() {
         targetCapacity = DEFAULT_CAPACITY;
@@ -72,6 +70,7 @@ public class DiyArrayList<T> {
         for (int i = 0; i < size; i++) {
             data[i] = null;
         }
+        size = 0;
     }
 
     public void sort(Comparator<T> comparator) {
@@ -88,7 +87,6 @@ public class DiyArrayList<T> {
 
     private void shift(boolean toTheLeft, int firstIndex) {
         int shift = toTheLeft ? -1 : 1;
-
         System.arraycopy(data, firstIndex, data, firstIndex + shift, size - firstIndex);
     }
 
@@ -107,11 +105,23 @@ public class DiyArrayList<T> {
             return false;
         }
         DiyArrayList<?> that = (DiyArrayList<?>) o;
-        return size == that.size && Objects.deepEquals(data, that.data);
+        if (size != that.size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (!data[i].equals(that.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Arrays.hashCode(data), size);
+        int hashCode = 1;
+        for (int i = 0; i < size; i++) {
+            hashCode = 31 * hashCode + (data[i] == null ? 0 : data[i].hashCode());
+        }
+        return hashCode;
     }
 }
