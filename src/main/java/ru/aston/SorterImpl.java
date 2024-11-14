@@ -3,7 +3,25 @@ package ru.aston;
 import java.util.Comparator;
 import java.util.Random;
 
+/**
+ * Класс-сортировщик, имплементирует интерфейс {@code Sorter}.
+ * Единственный публичный метод {@code sort} сортирует массивы любых объектов.
+ * Алгоритм – быстрая сортировка in place.
+ *
+ * <p>Средняя временная сложность быстрой сортировки – O(nlogn),
+ * но в худшем случае сортировка может выполняться за O(n^2).
+ * Т.к. алгоритм in place производит все манипуляции с данными внутри исходного массива,
+ * он имеет константную пространественную сложность.
+ */
 public class SorterImpl implements Sorter {
+    /**
+     * Сортирует переданный массив от нулевого элемента до индекса {@code size} не включительно.
+     *
+     * @param elements   массив с элементами
+     * @param size       количество элементов, которые нужно отсортировать
+     * @param comparator компаратор, сравнивающий элементы
+     * @param <T>        тип элементов
+     */
     @Override
     public <T> void sort(T[] elements, int size, Comparator<T> comparator) {
         Random random = new Random();
